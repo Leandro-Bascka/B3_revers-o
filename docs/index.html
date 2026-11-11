@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reversões B3</title>
+<meta name="description" content="Ações da B3 que corrigiram e mostram sinais de reversão, com checklist, níveis de stop e alvo.">
+<meta name="theme-color" content="#0B5C6E">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Reversões B3</h1>
+      <p id="sub">Carregando dados…</p>
+    </div>
+    <div class="tools">
+      <button class="btn" id="btn-refresh" type="button">Atualizar</button>
+      <button class="btn" id="btn-theme" type="button">Tema: automático</button>
+      <button class="btn primary" id="btn-install" type="button" hidden>Instalar app</button>
+    </div>
+  </header>
+
+  <div id="banner"></div>
+
+  <div class="tabs" id="tabs" role="group" aria-label="Filtrar por ação sugerida"></div>
+
+  <section class="filters" aria-label="Filtros">
+    <label class="field">Buscar ativo ou setor
+      <input type="search" id="f-q" placeholder="PETR4, energia…" autocomplete="off">
+    </label>
+    <label class="field">Pontuação mínima: <b id="f-min-v">40</b>
+      <input type="range" id="f-min" min="0" max="90" step="5" value="40">
+    </label>
+    <label class="field">Estratégia com opções
+      <select id="f-estr">
+        <option value="">Todas</option>
+        <option value="alta">Venda de PUT (vol. alta)</option>
+        <option value="média">Trava de alta (vol. média)</option>
+        <option value="baixa">Compra de CALL (vol. baixa)</option>
+      </select>
+    </label>
+    <label class="field">Ordenar por
+      <select id="f-ord">
+        <option value="score">Pontuação</option>
+        <option value="rr">Risco/retorno</option>
+        <option value="stop">Menor distância do stop</option>
+        <option value="dia">Variação do dia</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" id="f-bal" checked> Ocultar balanço próximo</label>
+    <label class="check"><input type="checkbox" id="f-fav"> Só favoritos</label>
+  </section>
+
+  <ul class="list" id="lista"></ul>
+
+  <footer class="rodape">
+    <p>Material educativo; não é recomendação de investimento. A análise técnica indica probabilidades, não certezas: defina o stop antes de entrar e confira cotação, liquidez e a série de opções na sua corretora. Dados do Yahoo Finance, ajustados por proventos, podem ter atraso ou falhas.</p>
+    <p id="ios-dica" hidden>No iPhone: abra no Safari, toque em Compartilhar e escolha Adicionar à Tela de Início.</p>
+  </footer>
+</div>
+
+<dialog class="drawer" id="drawer" aria-labelledby="d-tk"></dialog>
+
+<script src="chart.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
