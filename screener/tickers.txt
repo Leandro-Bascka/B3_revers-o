@@ -1,0 +1,126 @@
+# Universo de ativos líquidos da B3. Formato:  TICKER;Setor
+# Edite à vontade: adicione/remova linhas. Códigos que não existirem mais no
+# Yahoo Finance são ignorados e listados em "sem_dados" no data.json.
+# (Fusões e mudanças de código acontecem: se algum ativo sumir, confira o código atual.)
+
+# Bancos e financeiro
+ITUB4;Bancos e Financeiro
+BBDC4;Bancos e Financeiro
+BBAS3;Bancos e Financeiro
+SANB11;Bancos e Financeiro
+BPAC11;Bancos e Financeiro
+ITSA4;Bancos e Financeiro
+B3SA3;Bancos e Financeiro
+BBSE3;Bancos e Financeiro
+CXSE3;Bancos e Financeiro
+PSSA3;Bancos e Financeiro
+IRBR3;Bancos e Financeiro
+
+# Petróleo e gás
+PETR4;Petróleo e Gás
+PETR3;Petróleo e Gás
+PRIO3;Petróleo e Gás
+RECV3;Petróleo e Gás
+BRAV3;Petróleo e Gás
+VBBR3;Petróleo e Gás
+UGPA3;Petróleo e Gás
+CSAN3;Petróleo e Gás
+RAIZ4;Petróleo e Gás
+
+# Mineração, siderurgia, papel e celulose
+VALE3;Mineração e Siderurgia
+CMIN3;Mineração e Siderurgia
+CSNA3;Mineração e Siderurgia
+GGBR4;Mineração e Siderurgia
+GOAU4;Mineração e Siderurgia
+USIM5;Mineração e Siderurgia
+BRAP4;Mineração e Siderurgia
+SUZB3;Papel e Celulose
+KLBN11;Papel e Celulose
+
+# Energia elétrica e saneamento
+AXIA3;Energia e Saneamento
+CMIG4;Energia e Saneamento
+CPLE6;Energia e Saneamento
+CPFE3;Energia e Saneamento
+EQTL3;Energia e Saneamento
+ENGI11;Energia e Saneamento
+TAEE11;Energia e Saneamento
+ISAE4;Energia e Saneamento
+ENEV3;Energia e Saneamento
+AURE3;Energia e Saneamento
+NEOE3;Energia e Saneamento
+EGIE3;Energia e Saneamento
+ALUP11;Energia e Saneamento
+SBSP3;Energia e Saneamento
+SAPR11;Energia e Saneamento
+CSMG3;Energia e Saneamento
+
+# Varejo, consumo e alimentos
+LREN3;Varejo e Consumo
+MGLU3;Varejo e Consumo
+AZZA3;Varejo e Consumo
+CRFB3;Varejo e Consumo
+ASAI3;Varejo e Consumo
+PCAR3;Varejo e Consumo
+ALPA4;Varejo e Consumo
+VIVA3;Varejo e Consumo
+GUAR3;Varejo e Consumo
+CEAB3;Varejo e Consumo
+BHIA3;Varejo e Consumo
+NATU3;Varejo e Consumo
+ABEV3;Varejo e Consumo
+SMTO3;Varejo e Consumo
+SLCE3;Varejo e Consumo
+CAML3;Varejo e Consumo
+MDIA3;Varejo e Consumo
+BEEF3;Varejo e Consumo
+MBRF3;Varejo e Consumo
+JBSS3;Varejo e Consumo
+SMFT3;Varejo e Consumo
+
+# Saúde
+RDOR3;Saúde
+HAPV3;Saúde
+FLRY3;Saúde
+RADL3;Saúde
+HYPE3;Saúde
+
+# Construção e imobiliário
+CYRE3;Construção e Imobiliário
+MRVE3;Construção e Imobiliário
+EZTC3;Construção e Imobiliário
+DIRR3;Construção e Imobiliário
+CURY3;Construção e Imobiliário
+PLPL3;Construção e Imobiliário
+TEND3;Construção e Imobiliário
+JHSF3;Construção e Imobiliário
+MULT3;Construção e Imobiliário
+IGTI11;Construção e Imobiliário
+ALOS3;Construção e Imobiliário
+
+# Industrial e transporte
+WEGE3;Industrial e Transporte
+EMBR3;Industrial e Transporte
+RAIL3;Industrial e Transporte
+RENT3;Industrial e Transporte
+MOVI3;Industrial e Transporte
+VAMO3;Industrial e Transporte
+MOTV3;Industrial e Transporte
+ECOR3;Industrial e Transporte
+STBP3;Industrial e Transporte
+TUPY3;Industrial e Transporte
+POMO4;Industrial e Transporte
+KEPL3;Industrial e Transporte
+
+# Tecnologia, telecom e educação
+TOTS3;Tecnologia e Telecom
+LWSA3;Tecnologia e Telecom
+CASH3;Tecnologia e Telecom
+VIVT3;Tecnologia e Telecom
+TIMS3;Tecnologia e Telecom
+POSI3;Tecnologia e Telecom
+COGN3;Educação
+YDUQ3;Educação
+ANIM3;Educação
+CVCB3;Educação
