@@ -1,6 +1,6 @@
 {
   "min_liquidez": 5000000,
-  "min_barras": 260,
+  "min_barras": 300,
   "janela_pico": 150,
   "dd_min": 0.08,
   "dd_max": 0.45,
@@ -12,5 +12,7 @@
   "dte_max": 75,
   "limite_score_lista": 30,
   "dias_alerta_balanco": 7,
-  "barras_grafico": 160
+  "barras_grafico": 160,
+  "qtde_ativos": 150,
+  "tol_cotacao": 0.06
 }

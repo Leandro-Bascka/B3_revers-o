@@ -2,7 +2,7 @@
 
 Screener que procura ações da B3 que **corrigiram e começam a virar**, para você avaliar pontos de entrada em ação, compra de call ou venda de PUT.
 
-- Um robô no GitHub baixa os preços todo dia útil depois do fechamento, pontua cada ativo e publica `data.json`.
+- Um robô no GitHub busca no **Fundamentus** as ações mais negociadas, baixa o histórico de cada uma no **Yahoo Finance** todo dia útil depois do fechamento, pontua e publica `data.json`.
 - O app (PWA em `docs/`) lê esse arquivo e funciona no PC e no celular. Dá para instalar na tela inicial.
 - Cada ativo recebe uma nota de 0 a 100 por **confluência** de sinais, um checklist, níveis de stop e alvo, e uma sugestão de estrutura com opções.
 
@@ -18,7 +18,7 @@ Screener que procura ações da B3 que **corrigiram e começam a virar**, para v
 
 Depois disso o robô roda sozinho às 18:30 (Brasília), de segunda a sexta. O GitHub pode atrasar agendamentos em alguns minutos e **desativa agendamentos de repositórios sem nenhuma atividade por 60 dias** (basta reativar na aba Actions).
 
-O repositório já traz um `docs/data.json` de **demonstração com dados fictícios** (tickers `DEMOxx`), só para o app abrir de imediato. Ele é substituído na primeira execução.
+O repositório já traz um `docs/data.json` de **demonstração com dados fictícios** (tickers `DEMOxx`), só para o app abrir de imediato. Ele é substituído na primeira execução bem-sucedida; se a primeira falhar, veja o log em Actions.
 
 ## Como a nota é calculada
 
@@ -42,6 +42,15 @@ O repositório já traz um `docs/data.json` de **demonstração com dados fictí
 **Filtros automáticos:** liquidez mediana abaixo de R$ 5 milhões/dia, correção rasa (menos de 8%), queda profunda (mais de 45%) e ativos perto da máxima ficam de fora. Tudo é ajustável em `config.json`.
 
 O stop fica abaixo do fundo ascendente (ou da mínima, se ele ainda não existe), com folga de 0,3 ATR.
+
+## De onde vêm os dados e como são conferidos
+
+1. **Universo:** as `qtde_ativos` (150) ações com maior `Liq.2meses` no Fundamentus (volume médio negociado em R$/dia), acima de `min_liquidez`. Se o Fundamentus falhar, usa `screener/tickers.txt`; o app avisa qual fonte foi usada.
+2. **Preços:** Yahoo Finance, ativo a ativo, **sem ajuste por proventos** (`auto_adjust=False`): os preços batem com o gráfico da corretora e com a grade de strikes. Desdobramentos e grupamentos o Yahoo ajusta.
+3. **Controles de qualidade** (o que reprova vai para `descartados_qualidade` no `data.json`, com o motivo): histórico menor que 300 pregões, último pregão defasado, buraco maior que 10 dias, OHLC incoerente, salto diário acima de 40% (suspeita de desdobramento sem ajuste) e **preço do Yahoo mais de 6% diferente da cotação do Fundamentus**.
+4. **Disjuntores:** se os 10 primeiros ativos falharem no Yahoo, ou se menos de 60% passarem nos controles, o robô aborta sem publicar e a última versão continua no ar.
+
+O Fundamentus não informa setor; ativos fora de `tickers.txt` entram como "Outros" e, para eles, a força relativa vs. setor usa o momentum de 5 pregões. Vale acrescentar o setor deles em `tickers.txt`.
 
 ## Opções
 
@@ -71,7 +80,7 @@ cd docs && python -m http.server    # abre em http://localhost:8000
 
 ## Limites (leia)
 
-- **Os dados vêm do Yahoo Finance** (gratuito e não oficial): podem ter atraso, buracos ou ajustes de proventos diferentes dos da sua plataforma. Se menos de 60% dos ativos vierem, o robô aborta e não publica nada, mantendo a última versão.
+- **Fundamentus e Yahoo são fontes gratuitas e não oficiais**: podem ter atraso, mudar o layout ou bloquear acessos. O parser do Fundamentus foi testado só com um HTML simulado, não com a página real; se ela mudar de formato, o log da execução diz qual coluna faltou.
 - **A data de balanço do Yahoo costuma ser incompleta para a B3.** Confira o calendário de resultados antes de entrar, ou preencha `eventos.json`.
 - **Não há backtest.** Os critérios foram traduzidos de práticas comuns de análise técnica, mas os pesos e limiares são escolhas, não resultado de otimização. Antes de usar dinheiro real, confira os sinais em gráficos históricos e ajuste `config.json`.
 - O motor foi validado com cenários sintéticos (11 testes). A primeira execução com dados reais deve ser conferida visualmente, ativo a ativo, contra o seu gráfico.
