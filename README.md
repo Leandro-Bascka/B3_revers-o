@@ -85,3 +85,13 @@ cd docs && python -m http.server    # abre em http://localhost:8000
 - **Não há backtest.** Os critérios foram traduzidos de práticas comuns de análise técnica, mas os pesos e limiares são escolhas, não resultado de otimização. Antes de usar dinheiro real, confira os sinais em gráficos históricos e ajuste `config.json`.
 - O motor foi validado com cenários sintéticos (11 testes). A primeira execução com dados reais deve ser conferida visualmente, ativo a ativo, contra o seu gráfico.
 - O pivô de fundo ascendente só é reconhecido 3 pregões depois de formado; o sinal chega com esse atraso por desenho.
+
+
+## Seletividade no painel
+
+O painel permite escolher entre dois limites de pontuação, sem nova execução do Python:
+
+- **70 pontos — equilibrado:** exibe oportunidades com confluência relevante.
+- **85 pontos — seletivo:** restringe a lista a sinais de maior pontuação.
+
+A escolha fica salva no navegador utilizado (localStorage). O gerador continua publicando os resultados a partir do limite técnico configurado em `config.json` (`limite_score_lista`), que deve permanecer abaixo de 70 para que o painel possa oferecer os dois modos.
