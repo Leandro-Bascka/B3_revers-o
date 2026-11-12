@@ -19,7 +19,9 @@ from . import options as opt
 
 DEFAULTS: dict[str, Any] = {
     "min_liquidez": 5_000_000,
-    "min_barras": 260,
+    "min_barras": 300,
+    "qtde_ativos": 150,
+    "tol_cotacao": 0.06,
     "janela_pico": 150,
     "dd_min": 0.08,
     "dd_max": 0.45,

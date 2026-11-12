@@ -1,7 +1,8 @@
 """Executa o screener e grava docs/data.json.
 
 Uso:
-    python -m screener.run                # dados reais (Yahoo Finance)
+    python -m screener.run                # universo do Fundamentus + preços do Yahoo (reserva: tickers.txt)
+    python -m screener.run --fonte local  # só a lista de tickers.txt
     python -m screener.run --demo         # dados fictícios, só para testar
 """
 from __future__ import annotations
@@ -39,7 +40,7 @@ def processar(dfs, setores, bench, cfg):
     resultados, motivos = [], Counter()
     for t, d in dfs.items():
         setor = setores.get(t, "Outros")
-        pares = [r for (tt, r) in por_setor.get(setor, []) if tt != t]
+        pares = [] if setor == "Outros" else [r for (tt, r) in por_setor.get(setor, []) if tt != t]
         sret = float(np.mean(pares)) if len(pares) >= 2 else None
         try:
             res, motivo = engine.analyze(d, t, setor, bench, sret, cfg)
@@ -77,6 +78,8 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--out", default=str(RAIZ / "docs" / "data.json"))
     ap.add_argument("--tickers", default=str(RAIZ / "screener" / "tickers.txt"))
     ap.add_argument("--config", default=None)
+    ap.add_argument("--fonte", choices=["auto", "fundamentus", "local"], default="auto",
+                    help="origem do universo: Fundamentus (mais líquidas), lista local, ou auto (Fundamentus com reserva local)")
     ap.add_argument("--no-earnings", action="store_true", help="não consulta datas de balanço")
     args = ap.parse_args(argv)
 
@@ -84,19 +87,41 @@ def main(argv: Optional[list[str]] = None) -> int:
     tickers, setores = data.carregar_tickers(Path(args.tickers))
 
     descr: dict[str, str] = {}
+    fonte, descartes = "demo", {}
     if args.demo:
         dfs, setores, bench, descr = demo.dados_demo()
         universo = list(dfs)
     else:
-        universo = tickers
-        data.log(f"Baixando {len(universo)} ativos do Yahoo Finance...")
-        dfs = data.baixar(universo)
+        try:
+            import lxml, requests, yfinance  # noqa: F401
+        except ImportError as e:
+            data.log(f"ERRO: falta a biblioteca '{e.name}'. Rode: pip install -r requirements.txt")
+            return 1
+        cotacoes: dict[str, float] = {}
+        universo, fonte = tickers, "lista_local"
+        if args.fonte in ("auto", "fundamentus"):
+            data.log(f"Buscando as {cfg['qtde_ativos']} ações mais líquidas no Fundamentus...")
+            liq = data.obter_acoes_mais_liquidas(int(cfg["qtde_ativos"]), float(cfg["min_liquidez"]))
+            if not liq.empty:
+                universo, fonte = list(liq["AÇÃO"]), "fundamentus"
+                cotacoes = {t: c for t, c in zip(liq["AÇÃO"], liq["COTACAO"]) if c == c and c > 0}
+                data.log(f"  {len(universo)} ativos; menor liquidez: R$ {liq['LIQUIDEZ'].min() / 1e6:.1f} mi/dia")
+            elif args.fonte == "fundamentus":
+                data.log("ERRO: Fundamentus indisponível e --fonte fundamentus não permite reserva.")
+                return 1
+            else:
+                data.log("AVISO: Fundamentus indisponível; usando a lista local (screener/tickers.txt).")
+        data.log(f"Baixando {len(universo)} ativos do Yahoo Finance (sem ajuste por proventos)...")
+        dfs, descartes = data.baixar_universo(
+            universo, cotacoes, min_barras=int(cfg["min_barras"]), tol_cotacao=float(cfg["tol_cotacao"]))
+        for t, m in sorted(descartes.items()):
+            data.log(f"  descartado {t}: {m}")
         bench = data.baixar_indice()
         if bench is None:
             data.log("AVISO: sem índice de referência; força relativa vs Ibovespa ficará zerada.")
         cobertura = len(dfs) / max(len(universo), 1)
         if cobertura < 0.6:
-            data.log(f"ERRO: só {len(dfs)}/{len(universo)} ativos com dados ({cobertura:.0%}). Abortando para não publicar dados ruins.")
+            data.log(f"ERRO: só {len(dfs)}/{len(universo)} ativos aprovados ({cobertura:.0%}). Abortando para não publicar dados ruins.")
             return 1
 
     resultados, motivos = processar(dfs, setores, bench, cfg)
@@ -123,9 +148,11 @@ def main(argv: Optional[list[str]] = None) -> int:
         "gerado_em": dt.datetime.now(brt).isoformat(timespec="seconds"),
         "data_pregao": hoje.isoformat(),
         "estatisticas": {
+            "fonte_universo": fonte,
             "universo": len(universo),
             "com_dados": len(dfs),
             "sem_dados": sorted(set(universo) - set(dfs)),
+            "descartados_qualidade": dict(sorted(descartes.items())),
             "analisados": len(resultados),
             "na_lista": len(lista),
             "por_status": dict(por_status),
