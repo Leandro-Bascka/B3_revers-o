@@ -118,7 +118,7 @@
     const L = filtrados();
     if (S.data) {
       const st = S.data.estatisticas;
-      $("#sub").textContent = "Ações que corrigiram e começam a virar. Pregão de " + dbr(S.data.data_pregao) + ": " + st.analisados + " ativos analisados de " + st.universo + ", " + st.na_lista + " na lista.";
+      $("#sub").textContent = "Ações que corrigiram e começam a virar. Pregão de " + dbr(S.data.data_pregao) + ": " + st.analisados + " ativos analisados de " + st.universo + ", " + st.na_lista + " na lista. Universo: " + ({ fundamentus: "as mais líquidas segundo o Fundamentus", lista_local: "lista local (Fundamentus indisponível)", demo: "demonstração" }[st.fonte_universo] || "–") + (Object.keys(st.descartados_qualidade || {}).length ? "; " + Object.keys(st.descartados_qualidade).length + " descartados por qualidade de dados." : ".");
     } else $("#sub").textContent = "Sem dados.";
     $("#lista").innerHTML = L.length ? L.map(linha).join("") :
       '<li class="vazio">' + (S.data ? "Nenhum ativo com esses filtros. Reduza a pontuação mínima, desmarque “Ocultar balanço próximo” ou volte para a aba Todas." : "Aguardando dados.") + "</li>";
