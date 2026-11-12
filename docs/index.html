@@ -33,8 +33,12 @@
     <label class="field">Buscar ativo ou setor
       <input type="search" id="f-q" placeholder="PETR4, energia…" autocomplete="off">
     </label>
-    <label class="field">Pontuação mínima: <b id="f-min-v">40</b>
-      <input type="range" id="f-min" min="0" max="90" step="5" value="40">
+    <label class="field">Seletividade do sinal
+      <select id="f-min" aria-label="Pontuação mínima para exibir oportunidades">
+        <option value="70">70 pontos — equilibrado</option>
+        <option value="85">85 pontos — seletivo</option>
+      </select>
+      <small class="hint">A seleção filtra a lista sem precisar recompilar o scanner.</small>
     </label>
     <label class="field">Estratégia com opções
       <select id="f-estr">

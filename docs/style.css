@@ -146,3 +146,6 @@ dialog.drawer[open] { animation: entra .2s ease-out; }
 .it .dt { grid-column: 2 / 4; font-size: 13.5px; color: var(--ink2); }
 .opt-aviso { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
 .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Ajuda do seletor de pontuação */
+.hint { display:block; margin-top:5px; color:var(--muted, #718096); font-size:.78rem; line-height:1.35; }

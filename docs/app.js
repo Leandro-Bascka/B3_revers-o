@@ -27,7 +27,7 @@
   };
   const S = {
     data: null,
-    aba: store.get("aba", "todas"), q: "", min: store.get("min", 40), estr: store.get("estr", ""), ord: store.get("ord", "score"),
+    aba: store.get("aba", "todas"), q: "", min: [70, 85].includes(Number(store.get("min", 70))) ? Number(store.get("min", 70)) : 70, estr: store.get("estr", ""), ord: store.get("ord", "score"),
     bal: store.get("bal", true), favOnly: false, favs: new Set(store.get("favs", [])), tema: store.get("tema", "auto"),
     capital: store.get("capital", 20000), risco: store.get("risco", 1),
     chart: null, atual: null, graf: store.get("graf", { m21: true, m50: true, m200: true, avwap: true, niveis: true, barras: 120 }),
@@ -139,7 +139,13 @@
     S.aba = b.dataset.aba; store.set("aba", S.aba); render();
   });
   $("#f-q").addEventListener("input", (e) => { S.q = e.target.value; render(); });
-  $("#f-min").addEventListener("input", (e) => { S.min = +e.target.value; $("#f-min-v").textContent = S.min; store.set("min", S.min); render(); });
+  $("#f-min").value = String(S.min);
+  $("#f-min").addEventListener("change", (e) => {
+    const escolhido = Number(e.target.value);
+    S.min = [70, 85].includes(escolhido) ? escolhido : 70;
+    store.set("min", S.min);
+    render();
+  });
   $("#f-estr").addEventListener("change", (e) => { S.estr = e.target.value; store.set("estr", S.estr); render(); });
   $("#f-ord").addEventListener("change", (e) => { S.ord = e.target.value; store.set("ord", S.ord); render(); });
   $("#f-bal").addEventListener("change", (e) => { S.bal = e.target.checked; store.set("bal", S.bal); render(); });
